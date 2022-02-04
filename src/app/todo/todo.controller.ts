@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { TodoDto } from './dto/todo.dto';
-import { TodoService } from './todo.service';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common'
+import { TodoDto } from './dto/todo.dto'
+import { TodoService } from './todo.service'
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { TodoEntity } from './entity/todo.entity'
 
 @Controller('api/todos')
 @ApiTags('todo')
@@ -12,7 +13,7 @@ export class TodoController {
   @ApiOperation({ summary: 'get all tasks'})
   @ApiResponse({ status: 200, description: 'list of all tasks'})
   async index() {
-    return await this.todoService.findAll();
+    return await this.todoService.findAll()
   }
 
   @Get(':id')
@@ -20,8 +21,8 @@ export class TodoController {
   @ApiResponse({ status: 200, description: 'data of a task'})
   @ApiResponse({ status: 400, description: 'invalid params'})
   @ApiResponse({ status: 404, description: 'Task not found' })
-  async getById(@Param('id', new ParseUUIDPipe()) id: string) {
-    return await this.todoService.findOne(id);
+  async getById(@Param('id', new ParseUUIDPipe()) id: string): Promise<TodoEntity> {
+    return await this.todoService.findOne(id)
   }
 
   @Post()
@@ -38,7 +39,7 @@ export class TodoController {
   @ApiResponse({ status: 404, description: 'Task not found' })
   @ApiResponse({ status: 200, description: 'Task updated with success' })
   async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: TodoDto) {
-    return await this.todoService.updateByIyd(id, body);
+    return await this.todoService.updateByIyd(id, body)
   }
 
   @Delete(':id')
@@ -47,6 +48,6 @@ export class TodoController {
   @ApiResponse({ status: 404, description: 'Task not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', new ParseUUIDPipe()) id: string) {
-    await this.todoService.deleteById(id);
+    await this.todoService.deleteById(id)
   }
 }
